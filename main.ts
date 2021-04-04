@@ -25,6 +25,29 @@ function initHeroAnimations () {
     HeroCrouch()
     HeroJump()
 }
+function giveIntroduction () {
+    game.setDialogFrame(img`
+        . 2 2 2 2 2 2 2 2 2 2 2 2 2 . 
+        2 2 1 1 1 1 1 1 1 1 1 1 1 2 2 
+        2 1 1 2 2 2 2 2 2 2 2 2 1 1 2 
+        2 1 2 2 1 1 1 1 1 1 1 2 2 1 2 
+        2 1 2 1 1 1 1 1 1 1 1 1 2 1 2 
+        2 1 2 1 1 1 1 1 1 1 1 1 2 1 2 
+        2 1 2 1 1 1 1 1 1 1 1 1 2 1 2 
+        2 1 2 1 1 1 1 1 1 1 1 1 2 1 2 
+        2 1 2 1 1 1 1 1 1 1 1 1 2 1 2 
+        2 1 2 1 1 1 1 1 1 1 1 1 2 1 2 
+        2 1 2 1 1 1 1 1 1 1 1 1 2 1 2 
+        2 1 2 2 1 1 1 1 1 1 1 2 2 1 2 
+        2 1 1 2 2 2 2 2 2 2 2 2 1 1 2 
+        2 2 1 1 1 1 1 1 1 1 1 1 1 2 2 
+        . 2 2 2 2 2 2 2 2 2 2 2 2 2 . 
+        `)
+    game.setDialogCursor(assets.tile`myTile6`)
+    showIntroduction("Move with the left and right buttons.")
+    showIntroduction("Jump with the up or A button.")
+    showIntroduction("Double jump by pressing jump again.")
+}
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     试图跳跃()
 })
@@ -55,15 +78,55 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
 })
 function 生成游戏对象 () {
     for (let 值 of tiles.getTilesByType(assets.tile`myTile3`)) {
-        pumps = sprites.create(assets.tile`myTile3`, SpriteKind.Mushroom)
-        tiles.placeOnTile(pumps, 值)
+        mushrooms = sprites.create(assets.tile`myTile3`, SpriteKind.Mushroom)
+        animation.runImageAnimation(
+        mushrooms,
+        [img`
+            . . . . . 4 4 4 4 4 4 . . . . . 
+            . . . . 4 4 4 4 4 4 4 4 . . . . 
+            . . . 4 4 4 4 4 4 4 4 4 4 . . . 
+            . . 4 f f 4 4 4 4 4 4 f f 4 . . 
+            . 4 4 4 d f 4 4 4 4 f d 4 4 4 . 
+            . 4 4 4 d f f f f f f d 4 4 4 . 
+            4 4 4 4 d f d 4 4 d f d 4 4 4 4 
+            4 4 4 4 d d d 4 4 d d d 4 4 4 4 
+            4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
+            . 4 4 4 4 d d d d d d 4 4 4 4 . 
+            . . . . d d d d d d d d . . . . 
+            . . . . d d d d d d d d . . . . 
+            . . f f d d d d d d d d . . . . 
+            . f f f f f d d d d d f f . . . 
+            . f f f f f f d d d f f f . . . 
+            . . f f f f f . . f f f . . . . 
+            `,img`
+            . . . . . 4 4 4 4 4 4 . . . . . 
+            . . . . 4 4 4 4 4 4 4 4 . . . . 
+            . . . 4 4 4 4 4 4 4 4 4 4 . . . 
+            . . 4 f f 4 4 4 4 4 4 f f 4 . . 
+            . 4 4 4 d f 4 4 4 4 f d 4 4 4 . 
+            . 4 4 4 d f f f f f f d 4 4 4 . 
+            4 4 4 4 d f d 4 4 d f d 4 4 4 4 
+            4 4 4 4 d d d 4 4 d d d 4 4 4 4 
+            4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 4 
+            . 4 4 4 4 d d d d d d 4 4 4 4 . 
+            . . . . d d d d d d d d . . . . 
+            . . . . d d d d d d d d . . . . 
+            . . . . d d d d d d d d f f . . 
+            . . . f f d d d d d f f f f f . 
+            . . . f f f d d d f f f f f f . 
+            . . . . f f f . . f f f f f . . 
+            `],
+        200,
+        true
+        )
+        tiles.placeOnTile(mushrooms, 值)
         tiles.setTileAt(值, assets.tile`transparency16`)
-        pumps.ay = 重力加速度
-        pumps.setFlag(SpriteFlag.BounceOnWall, true)
+        mushrooms.ay = 重力加速度
+        mushrooms.setFlag(SpriteFlag.BounceOnWall, false)
         if (Math.percentChance(50)) {
-            pumps.vx = randint(30, 60)
+            mushrooms.vx = randint(30, 60)
         } else {
-            pumps.vx = randint(-60, -30)
+            mushrooms.vx = randint(-60, -30)
         }
     }
     for (let 值 of tiles.getTilesByType(assets.tile`myTile5`)) {
@@ -304,6 +367,10 @@ function HeroIdle () {
         . . . . f f f . . f f f . . . . 
         `)
 }
+function showIntroduction (text: string) {
+    game.showLongText(text, DialogLayout.Bottom)
+    music.baDing.play()
+}
 function 清空游戏对象 () {
     for (let 值 of sprites.allOfKind(SpriteKind.Potato)) {
         值.destroy()
@@ -480,6 +547,7 @@ let heroFacingLeft = false
 let anim: animation.Animation = null
 let coins: Sprite = null
 let pumps: Sprite = null
+let mushrooms: Sprite = null
 let 二次跳跃速度 = 0
 let 可以二次跳跃 = false
 let 重力加速度 = 0
@@ -512,6 +580,7 @@ createPlayer(hero)
 let 当前关卡 = 1
 let 关卡数量 = 3
 initLevelMap(当前关卡)
+giveIntroduction()
 game.onUpdate(function () {
     if (hero.isHittingTile(CollisionDirection.Bottom)) {
         可以二次跳跃 = true
@@ -520,7 +589,7 @@ game.onUpdate(function () {
 game.onUpdate(function () {
     if (hero.vx < 0) {
         heroFacingLeft = true
-    } else {
+    } else if (hero.vx > 0) {
         heroFacingLeft = false
     }
     if (hero.isHittingTile(CollisionDirection.Top)) {
@@ -528,11 +597,34 @@ game.onUpdate(function () {
     }
     if (controller.down.isPressed()) {
         if (heroFacingLeft) {
-            animation.setAction(hero, ActionKind.Walking)
+            animation.setAction(hero, ActionKind.Crouchleft)
         } else {
-            animation.setAction(hero, ActionKind.Walking)
+            animation.setAction(hero, ActionKind.Crouchright)
         }
+    } else if (hero.vy < 60 && !(hero.isHittingTile(CollisionDirection.Bottom))) {
+        if (heroFacingLeft) {
+            animation.setAction(hero, ActionKind.Jumpleft)
+        } else {
+            animation.setAction(hero, ActionKind.Jumpright)
+        }
+    } else if (hero.vx < 0) {
+        animation.setAction(hero, ActionKind.Runleft)
+    } else if (hero.vx > 0) {
+        animation.setAction(hero, ActionKind.Runright)
     } else {
-    	
+        if (heroFacingLeft) {
+            animation.setAction(hero, ActionKind.Idleleft)
+        } else {
+            animation.setAction(hero, ActionKind.Idleright)
+        }
+    }
+})
+game.onUpdate(function () {
+    for (let 值 of sprites.allOfKind(SpriteKind.Mushroom)) {
+        if (值.isHittingTile(CollisionDirection.Left)) {
+            值.vx = randint(30, 60)
+        } else if (值.isHittingTile(CollisionDirection.Right)) {
+            值.vx = randint(-60, -30)
+        }
     }
 })
