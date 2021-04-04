@@ -1,7 +1,15 @@
 enum ActionKind {
     Walking,
     Idle,
-    Jumping
+    Jumping,
+    Runleft,
+    Runright,
+    Jumpleft,
+    Jumpright,
+    Idleleft,
+    Idleright,
+    Crouchleft,
+    Crouchright
 }
 namespace SpriteKind {
     export const Potato = SpriteKind.create()
@@ -11,54 +19,15 @@ namespace SpriteKind {
     export const Mushroom = SpriteKind.create()
     export const pumpkins = SpriteKind.create()
 }
-function 初始化南瓜动画 () {
-	
+function initHeroAnimations () {
+    HeroRun()
+    HeroIdle()
+    HeroCrouch()
+    HeroJump()
 }
 controller.up.onEvent(ControllerButtonEvent.Pressed, function () {
     试图跳跃()
 })
-function 英雄下蹲动画 () {
-    英雄下蹲左 = animation.createAnimation(ActionKind.Walking, 100)
-    animation.attachAnimation(hero, 英雄下蹲左)
-    英雄下蹲左.addAnimationFrame(img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . f f f f f f f f f f . . . 
-        . . f e e e e e e e e e e f . . 
-        . f e e e e e e e e e e e e f . 
-        . f d d d d d d d d d e e d f . 
-        . f d d f d d d d f d d e d f . 
-        . f d d f d d d d f d d d e f . 
-        . f d d f d d d d f d d d f . . 
-        . f d d d d d d d d d d d f . . 
-        . f a c c c c c c c c a b f . . 
-        . f d c c c c c c c c c d d f . 
-        f d d f f f b b f f f f d d f . 
-        . f f a a a a a a a a a b f . . 
-        . . . f f f f . . f f f f . . . 
-        `)
-    英雄下蹲右 = animation.createAnimation(ActionKind.Walking, 100)
-    animation.attachAnimation(hero, 英雄下蹲右)
-    英雄下蹲右.addAnimationFrame(img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . f f f f f f f f f f . . . 
-        . . f e e e e e e e e e e f . . 
-        . f e e e e e e e e e e e e f . 
-        . f d e e d d d d d d d d d f . 
-        . f d e d d f d d d d f d d f . 
-        . f e d d d f d d d d f d d f . 
-        . . f d d d f d d d d f d d f . 
-        . . f d d d d d d d d d d d f . 
-        . . f b a c c c c c c c c a f . 
-        . f d d c c c c c c c c c d f . 
-        . f d d f f f f b b f f f d d f 
-        . . f b a a a a a a a a a f f . 
-        . . . f f f f . . f f f f . . . 
-        `)
-}
 function 试图跳跃 () {
     if (hero.isHittingTile(CollisionDirection.Bottom)) {
         hero.vy = -4 * 单位高度
@@ -73,136 +42,17 @@ function 试图跳跃 () {
         可以二次跳跃 = false
     }
 }
-function 初始化金币动画 () {
+function initPumpkinAnimations () {
 	
 }
-function 英雄跳跃动画 () {
-    英雄向左跳 = animation.createAnimation(ActionKind.Walking, 100)
-    animation.attachAnimation(hero, 英雄向左跳)
-    英雄向左跳.addAnimationFrame(img`
-        . . . . . . . . . . . . . . . . 
-        . . . f f f f f f f f f f . . . 
-        . . f e e e e e e e e e e f . . 
-        . f e e e e e e e e e e e e f . 
-        . f d d d d d d d d d e e d f . 
-        . f d d f d d d d f d d e d f . 
-        . f d d f d d d d f d d d e f . 
-        . f d d f d d d d f d d d f . . 
-        . f d d d d d d d d d d d f . . 
-        . f a c c c c c c c c a b f . . 
-        . f d d c c c c c c d d d f . . 
-        . f d f f f b b f f f d d f . . 
-        . . f a a a a a a a a a b f . . 
-        . . . f a a b f f a a b f . . . 
-        . . . f a a b f f a a b f . . . 
-        . . . . f f f . . f f f . . . . 
-        `)
-    英雄向左跳.addAnimationFrame(img`
-        . . . . . . . . . . . . . . . . 
-        . . . f f f f f f f f f f . . . 
-        . . f e e e e e e e e e e f . . 
-        . f e e e e e e e e e e e e f . 
-        . f d d d d d d d d d e e d f . 
-        . f d d f d d d d f d d e d f . 
-        . f d d f d d d d f d d d e f . 
-        . f d d f d d d d f d d d f . . 
-        . f d d d d d d d d d d d f . . 
-        . f a c c c c c c c c a b f . . 
-        . f d d c c c c c c d d d f . . 
-        . f d f f f b b f f f d d f . . 
-        . . f a a a a a a a a a b f . . 
-        . . . f a a b f f a a b f . . . 
-        . . . . f f f . . f f f . . . . 
-        . . . . . . . . . . . . . . . . 
-        `)
-    for (let index = 0; index < 30; index++) {
-        英雄向左跳.addAnimationFrame(img`
-            . . . . . . . . . . . . . . . . 
-            . . . f f f f f f f f f f . . . 
-            . . f e e e e e e e e e e f . . 
-            . f e e e e e e e e e e e e f . 
-            . f d d d d d d d d d e e d f . 
-            . f d d f d d d d f d d e d f . 
-            . f d d f d d d d f d d d e f . 
-            . f d d f d d d d f d d d f . . 
-            . f d d d d d d d d d d d f a . 
-            . d a b c c c c c c c c b a d . 
-            . d a c c c c c c c c c c a d . 
-            . f f f f f b b f f f f f f a . 
-            . . f a a a a a a a a a b f . . 
-            . . . f a a b f f a a b f . . . 
-            . . . . f f f . . f f f . . . . 
-            . . . . . . . . . . . . . . . . 
-            `)
-    }
-    英雄向右跳 = animation.createAnimation(ActionKind.Walking, 100)
-    animation.attachAnimation(hero, 英雄向右跳)
-    英雄向右跳.addAnimationFrame(img`
-        . . . . . . . . . . . . . . . . 
-        . . . f f f f f f f f f f . . . 
-        . . f e e e e e e e e e e f . . 
-        . f e e e e e e e e e e e e f . 
-        . f d e e d d d d d d d d d f . 
-        . f d e d d f d d d d f d d f . 
-        . f e d d d f d d d d f d d f . 
-        . . f d d d f d d d d f d d f . 
-        . . f d d d d d d d d d d d f . 
-        . . f b a c c c c c c c c a f . 
-        . . f d d d c c c c c c d d f . 
-        . . f d d f f f b b f f f d f . 
-        . . f b a a a a a a a a a f . . 
-        . . . f b a a f f b a a f . . . 
-        . . . f b a a f f b a a f . . . 
-        . . . . f f f . . f f f . . . . 
-        `)
-    英雄向右跳.addAnimationFrame(img`
-        . . . . . . . . . . . . . . . . 
-        . . . f f f f f f f f f f . . . 
-        . . f e e e e e e e e e e f . . 
-        . f e e e e e e e e e e e e f . 
-        . f d e e d d d d d d d d d f . 
-        . f d e d d f d d d d f d d f . 
-        . f e d d d f d d d d f d d f . 
-        . . f d d d f d d d d f d d f . 
-        . . f d d d d d d d d d d d f . 
-        . . f b a c c c c c c c c a f . 
-        . . f d d d c c c c c c d d f . 
-        . . f d d f f f b b f f f d f . 
-        . . f b a a a a a a a a a f . . 
-        . . . f b a a f f b a a f . . . 
-        . . . . f f f . . f f f . . . . 
-        . . . . . . . . . . . . . . . . 
-        `)
-    for (let index = 0; index < 30; index++) {
-        英雄向左跳.addAnimationFrame(img`
-            . . . . . . . . . . . . . . . . 
-            . . . f f f f f f f f f f . . . 
-            . . f e e e e e e e e e e f . . 
-            . f e e e e e e e e e e e e f . 
-            . f d e e d d d d d d d d d f . 
-            . f d e d d f d d d d f d d f . 
-            . f e d d d f d d d d f d d f . 
-            . . f d d d f d d d d f d d f . 
-            . a f d d d d d d d d d d d f . 
-            . d a b c c c c c c c c b a d . 
-            . d a c c c c c c c c c c a d . 
-            . a f f f f f f b b f f f f f . 
-            . . f b a a a a a a a a a f . . 
-            . . . f b a a f f b a a f . . . 
-            . . . . f f f . . f f f . . . . 
-            . . . . . . . . . . . . . . . . 
-            `)
-    }
+function initAnimations () {
+    initHeroAnimations()
+    initCoinAnimations()
+    initPumpkinAnimations()
 }
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     试图跳跃()
 })
-function 初始化英雄动画 () {
-    英雄跑动动画()
-    英雄空闲动画()
-    英雄下蹲动画()
-    英雄跳跃动画()
-}
 function 生成游戏对象 () {
     for (let 值 of tiles.getTilesByType(assets.tile`myTile3`)) {
         pumps = sprites.create(assets.tile`myTile3`, SpriteKind.Mushroom)
@@ -227,7 +77,7 @@ function 生成游戏对象 () {
         tiles.setTileAt(值, assets.tile`transparency16`)
     }
 }
-function 根据当前关卡设置地图 (关卡: number) {
+function initLevelMap (关卡: number) {
     清空游戏对象()
     if (关卡 == 1) {
         tiles.setTilemap(tilemap`级别1`)
@@ -236,12 +86,68 @@ function 根据当前关卡设置地图 (关卡: number) {
     } else if (关卡 == 3) {
         tiles.setTilemap(tilemap`级别3`)
     }
-    初始化关卡(关卡)
+    initobj(关卡)
 }
-function 英雄空闲动画 () {
-    英雄空闲左 = animation.createAnimation(ActionKind.Walking, 100)
-    animation.attachAnimation(hero, 英雄空闲左)
-    英雄空闲左.addAnimationFrame(img`
+function initobj (关卡: number) {
+    effects.clouds.startScreenEffect()
+    for (let 值 of tiles.getTilesByType(assets.tile`myTile8`)) {
+        tiles.placeOnTile(hero, 值)
+        tiles.setTileAt(值, assets.tile`transparency16`)
+    }
+    for (let 值 of tiles.getTilesByType(assets.tile`myTile`)) {
+        tiles.setWallAt(值, true)
+    }
+    for (let 值 of tiles.getTilesByType(assets.tile`myTile0`)) {
+        tiles.setWallAt(值, true)
+    }
+    生成游戏对象()
+}
+function HeroCrouch () {
+    anim = animation.createAnimation(ActionKind.Crouchleft, 100)
+    animation.attachAnimation(hero, anim)
+    anim.addAnimationFrame(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . f f f f f f f f f f . . . 
+        . . f e e e e e e e e e e f . . 
+        . f e e e e e e e e e e e e f . 
+        . f d d d d d d d d d e e d f . 
+        . f d d f d d d d f d d e d f . 
+        . f d d f d d d d f d d d e f . 
+        . f d d f d d d d f d d d f . . 
+        . f d d d d d d d d d d d f . . 
+        . f a c c c c c c c c a b f . . 
+        . f d c c c c c c c c c d d f . 
+        f d d f f f b b f f f f d d f . 
+        . f f a a a a a a a a a b f . . 
+        . . . f f f f . . f f f f . . . 
+        `)
+    anim = animation.createAnimation(ActionKind.Crouchright, 100)
+    animation.attachAnimation(hero, anim)
+    anim.addAnimationFrame(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . f f f f f f f f f f . . . 
+        . . f e e e e e e e e e e f . . 
+        . f e e e e e e e e e e e e f . 
+        . f d e e d d d d d d d d d f . 
+        . f d e d d f d d d d f d d f . 
+        . f e d d d f d d d d f d d f . 
+        . . f d d d f d d d d f d d f . 
+        . . f d d d d d d d d d d d f . 
+        . . f b a c c c c c c c c a f . 
+        . f d d c c c c c c c c c d f . 
+        . f d d f f f f b b f f f d d f 
+        . . f b a a a a a a a a a f f . 
+        . . . f f f f . . f f f f . . . 
+        `)
+}
+function HeroJump () {
+    anim = animation.createAnimation(ActionKind.Jumpleft, 100)
+    animation.attachAnimation(hero, anim)
+    anim.addAnimationFrame(img`
         . . . . . . . . . . . . . . . . 
         . . . f f f f f f f f f f . . . 
         . . f e e e e e e e e e e f . . 
@@ -259,9 +165,127 @@ function 英雄空闲动画 () {
         . . . f a a b f f a a b f . . . 
         . . . . f f f . . f f f . . . . 
         `)
-    英雄空闲右 = animation.createAnimation(ActionKind.Walking, 100)
-    animation.attachAnimation(hero, 英雄空闲右)
-    英雄空闲右.addAnimationFrame(img`
+    anim.addAnimationFrame(img`
+        . . . . . . . . . . . . . . . . 
+        . . . f f f f f f f f f f . . . 
+        . . f e e e e e e e e e e f . . 
+        . f e e e e e e e e e e e e f . 
+        . f d d d d d d d d d e e d f . 
+        . f d d f d d d d f d d e d f . 
+        . f d d f d d d d f d d d e f . 
+        . f d d f d d d d f d d d f . . 
+        . f d d d d d d d d d d d f . . 
+        . f a c c c c c c c c a b f . . 
+        . f d d c c c c c c d d d f . . 
+        . f d f f f b b f f f d d f . . 
+        . . f a a a a a a a a a b f . . 
+        . . . f a a b f f a a b f . . . 
+        . . . . f f f . . f f f . . . . 
+        . . . . . . . . . . . . . . . . 
+        `)
+    for (let index = 0; index < 30; index++) {
+        anim.addAnimationFrame(img`
+            . . . . . . . . . . . . . . . . 
+            . . . f f f f f f f f f f . . . 
+            . . f e e e e e e e e e e f . . 
+            . f e e e e e e e e e e e e f . 
+            . f d d d d d d d d d e e d f . 
+            . f d d f d d d d f d d e d f . 
+            . f d d f d d d d f d d d e f . 
+            . f d d f d d d d f d d d f . . 
+            . f d d d d d d d d d d d f a . 
+            . d a b c c c c c c c c b a d . 
+            . d a c c c c c c c c c c a d . 
+            . f f f f f b b f f f f f f a . 
+            . . f a a a a a a a a a b f . . 
+            . . . f a a b f f a a b f . . . 
+            . . . . f f f . . f f f . . . . 
+            . . . . . . . . . . . . . . . . 
+            `)
+    }
+    anim = animation.createAnimation(ActionKind.Jumpright, 100)
+    animation.attachAnimation(hero, anim)
+    anim.addAnimationFrame(img`
+        . . . . . . . . . . . . . . . . 
+        . . . f f f f f f f f f f . . . 
+        . . f e e e e e e e e e e f . . 
+        . f e e e e e e e e e e e e f . 
+        . f d e e d d d d d d d d d f . 
+        . f d e d d f d d d d f d d f . 
+        . f e d d d f d d d d f d d f . 
+        . . f d d d f d d d d f d d f . 
+        . . f d d d d d d d d d d d f . 
+        . . f b a c c c c c c c c a f . 
+        . . f d d d c c c c c c d d f . 
+        . . f d d f f f b b f f f d f . 
+        . . f b a a a a a a a a a f . . 
+        . . . f b a a f f b a a f . . . 
+        . . . f b a a f f b a a f . . . 
+        . . . . f f f . . f f f . . . . 
+        `)
+    anim.addAnimationFrame(img`
+        . . . . . . . . . . . . . . . . 
+        . . . f f f f f f f f f f . . . 
+        . . f e e e e e e e e e e f . . 
+        . f e e e e e e e e e e e e f . 
+        . f d e e d d d d d d d d d f . 
+        . f d e d d f d d d d f d d f . 
+        . f e d d d f d d d d f d d f . 
+        . . f d d d f d d d d f d d f . 
+        . . f d d d d d d d d d d d f . 
+        . . f b a c c c c c c c c a f . 
+        . . f d d d c c c c c c d d f . 
+        . . f d d f f f b b f f f d f . 
+        . . f b a a a a a a a a a f . . 
+        . . . f b a a f f b a a f . . . 
+        . . . . f f f . . f f f . . . . 
+        . . . . . . . . . . . . . . . . 
+        `)
+    for (let index = 0; index < 30; index++) {
+        anim.addAnimationFrame(img`
+            . . . . . . . . . . . . . . . . 
+            . . . f f f f f f f f f f . . . 
+            . . f e e e e e e e e e e f . . 
+            . f e e e e e e e e e e e e f . 
+            . f d e e d d d d d d d d d f . 
+            . f d e d d f d d d d f d d f . 
+            . f e d d d f d d d d f d d f . 
+            . . f d d d f d d d d f d d f . 
+            . a f d d d d d d d d d d d f . 
+            . d a b c c c c c c c c b a d . 
+            . d a c c c c c c c c c c a d . 
+            . a f f f f f f b b f f f f f . 
+            . . f b a a a a a a a a a f . . 
+            . . . f b a a f f b a a f . . . 
+            . . . . f f f . . f f f . . . . 
+            . . . . . . . . . . . . . . . . 
+            `)
+    }
+}
+function HeroIdle () {
+    anim = animation.createAnimation(ActionKind.Idleleft, 100)
+    animation.attachAnimation(hero, anim)
+    anim.addAnimationFrame(img`
+        . . . . . . . . . . . . . . . . 
+        . . . f f f f f f f f f f . . . 
+        . . f e e e e e e e e e e f . . 
+        . f e e e e e e e e e e e e f . 
+        . f d d d d d d d d d e e d f . 
+        . f d d f d d d d f d d e d f . 
+        . f d d f d d d d f d d d e f . 
+        . f d d f d d d d f d d d f . . 
+        . f d d d d d d d d d d d f . . 
+        . f a c c c c c c c c a b f . . 
+        . f d d c c c c c c d d d f . . 
+        . f d f f f b b f f f d d f . . 
+        . . f a a a a a a a a a b f . . 
+        . . . f a a b f f a a b f . . . 
+        . . . f a a b f f a a b f . . . 
+        . . . . f f f . . f f f . . . . 
+        `)
+    anim = animation.createAnimation(ActionKind.Idleright, 100)
+    animation.attachAnimation(hero, anim)
+    anim.addAnimationFrame(img`
         . . . . . . . . . . . . . . . . 
         . . . f f f f f f f f f f . . . 
         . . f e e e e e e e e e e f . . 
@@ -280,10 +304,21 @@ function 英雄空闲动画 () {
         . . . . f f f . . f f f . . . . 
         `)
 }
-function 英雄跑动动画 () {
-    英雄向左跑 = animation.createAnimation(ActionKind.Walking, 100)
-    animation.attachAnimation(hero, 英雄向左跑)
-    英雄向左跑.addAnimationFrame(img`
+function 清空游戏对象 () {
+    for (let 值 of sprites.allOfKind(SpriteKind.Potato)) {
+        值.destroy()
+    }
+    for (let 值 of sprites.allOfKind(SpriteKind.Pumpkin)) {
+        值.destroy()
+    }
+    for (let 值 of sprites.allOfKind(SpriteKind.Coin)) {
+        值.destroy()
+    }
+}
+function HeroRun () {
+    anim = animation.createAnimation(ActionKind.Runleft, 100)
+    animation.attachAnimation(hero, anim)
+    anim.addAnimationFrame(img`
         . . . . . . . . . . . . . . . . 
         . . . f f f f f f f . . . . . . 
         . . f e e e e e e e f . . . . . 
@@ -301,7 +336,7 @@ function 英雄跑动动画 () {
         . . . f a a a a b f . . . . . . 
         . . . . f f f f f . . . . . . . 
         `)
-    英雄向左跑.addAnimationFrame(img`
+    anim.addAnimationFrame(img`
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
         . . . f f f f f f f . . . . . . 
@@ -319,7 +354,7 @@ function 英雄跑动动画 () {
         . . . f a a b f f a a a f f . . 
         . . . . f f f . f f f f f . . . 
         `)
-    英雄向左跑.addAnimationFrame(img`
+    anim.addAnimationFrame(img`
         . . . . . . . . . . . . . . . . 
         . . . f f f f f f f . . . . . . 
         . . f e e e e e e e f . . . . . 
@@ -337,7 +372,7 @@ function 英雄跑动动画 () {
         . . . f a a a a b f . . . . . . 
         . . . . f f f f f . . . . . . . 
         `)
-    英雄向左跑.addAnimationFrame(img`
+    anim.addAnimationFrame(img`
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
         . . . f f f f f f f . . . . . . 
@@ -355,9 +390,9 @@ function 英雄跑动动画 () {
         . f a a b f a a b f f . . . . . 
         . f f f f . f f f . . . . . . . 
         `)
-    英雄向右跑 = animation.createAnimation(ActionKind.Walking, 100)
-    animation.attachAnimation(hero, 英雄向右跑)
-    英雄向右跑.addAnimationFrame(img`
+    anim = animation.createAnimation(ActionKind.Runright, 100)
+    animation.attachAnimation(hero, anim)
+    anim.addAnimationFrame(img`
         . . . . . . . . . . . . . . . . 
         . . . . . . f f f f f f f . . . 
         . . . . . f e e e e e e e f . . 
@@ -375,7 +410,7 @@ function 英雄跑动动画 () {
         . . . . . . f b a a a a f . . . 
         . . . . . . . f f f f f . . . . 
         `)
-    英雄向右跑.addAnimationFrame(img`
+    anim.addAnimationFrame(img`
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
         . . . . . . f f f f f f f . . . 
@@ -393,7 +428,7 @@ function 英雄跑动动画 () {
         . . f f a a a f f b a a f . . . 
         . . . f f f f f . f f f . . . . 
         `)
-    英雄向右跑.addAnimationFrame(img`
+    anim.addAnimationFrame(img`
         . . . . . . . . . . . . . . . . 
         . . . . . . f f f f f f f . . . 
         . . . . . f e e e e e e e f . . 
@@ -411,7 +446,7 @@ function 英雄跑动动画 () {
         . . . . . . f b a a a a f . . . 
         . . . . . . . f f f f f . . . . 
         `)
-    英雄向右跑.addAnimationFrame(img`
+    anim.addAnimationFrame(img`
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
         . . . . . . f f f f f f f . . . 
@@ -430,31 +465,6 @@ function 英雄跑动动画 () {
         . . . . . . . f f f . f f f f . 
         `)
 }
-function 清空游戏对象 () {
-    for (let 值 of sprites.allOfKind(SpriteKind.Potato)) {
-        值.destroy()
-    }
-    for (let 值 of sprites.allOfKind(SpriteKind.Pumpkin)) {
-        值.destroy()
-    }
-    for (let 值 of sprites.allOfKind(SpriteKind.Coin)) {
-        值.destroy()
-    }
-}
-function 初始化关卡 (关卡: number) {
-    effects.clouds.startScreenEffect()
-    for (let 值 of tiles.getTilesByType(assets.tile`myTile8`)) {
-        tiles.placeOnTile(hero, 值)
-        tiles.setTileAt(值, assets.tile`transparency16`)
-    }
-    for (let 值 of tiles.getTilesByType(assets.tile`myTile`)) {
-        tiles.setWallAt(值, true)
-    }
-    for (let 值 of tiles.getTilesByType(assets.tile`myTile0`)) {
-        tiles.setWallAt(值, true)
-    }
-    生成游戏对象()
-}
 function createPlayer (plr: Sprite) {
     plr.ay = 重力加速度
     scene.cameraFollowSprite(plr)
@@ -463,24 +473,15 @@ function createPlayer (plr: Sprite) {
     info.setLife(3)
     info.setScore(0)
 }
-function 初始化动画 () {
-    初始化英雄动画()
-    初始化金币动画()
-    初始化南瓜动画()
+function initCoinAnimations () {
+	
 }
 let heroFacingLeft = false
-let 英雄向右跑: animation.Animation = null
-let 英雄向左跑: animation.Animation = null
-let 英雄空闲右: animation.Animation = null
-let 英雄空闲左: animation.Animation = null
+let anim: animation.Animation = null
 let coins: Sprite = null
 let pumps: Sprite = null
-let 英雄向右跳: animation.Animation = null
-let 英雄向左跳: animation.Animation = null
 let 二次跳跃速度 = 0
 let 可以二次跳跃 = false
-let 英雄下蹲右: animation.Animation = null
-let 英雄下蹲左: animation.Animation = null
 let 重力加速度 = 0
 let 单位高度 = 0
 let hero: Sprite = null
@@ -506,11 +507,11 @@ hero = sprites.create(img`
 let 无敌时间 = 600
 单位高度 = 30
 重力加速度 = 9.8 * 单位高度
-初始化动画()
+initAnimations()
 createPlayer(hero)
 let 当前关卡 = 1
 let 关卡数量 = 3
-根据当前关卡设置地图(当前关卡)
+initLevelMap(当前关卡)
 game.onUpdate(function () {
     if (hero.isHittingTile(CollisionDirection.Bottom)) {
         可以二次跳跃 = true
